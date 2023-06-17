@@ -9,9 +9,9 @@ pub struct MenuPlugin;
 impl Plugin for MenuPlugin {
     fn build(&self, app: &mut App) {
         app.init_resource::<ButtonColors>()
-            .add_system(setup_menu.in_schedule(OnEnter(GameState::Menu)))
-            .add_system(click_play_button.in_set(OnUpdate(GameState::Menu)))
-            .add_system(cleanup_menu.in_schedule(OnExit(GameState::Menu)));
+            .add_system(setup_menu.in_schedule(OnEnter(GameState::StartMenu)))
+            .add_system(play_button.in_set(OnUpdate(GameState::StartMenu)))
+            .add_system(cleanup_menu.in_schedule(OnExit(GameState::StartMenu)));
     }
 }
 
@@ -24,12 +24,13 @@ struct ButtonColors {
 impl Default for ButtonColors {
     fn default() -> Self {
         ButtonColors {
-            normal: Color::rgb(0.15, 0.15, 0.15),
-            hovered: Color::rgb(0.25, 0.25, 0.25),
+            normal: Color::rgb(0.95, 0.95, 0.95),
+            hovered: Color::rgb(0.75, 0.75, 0.75),
         }
     }
 }
 
+// Bevy System
 fn setup_menu(
     mut commands: Commands,
     font_assets: Res<FontAssets>,
@@ -39,7 +40,7 @@ fn setup_menu(
     commands
         .spawn(ButtonBundle {
             style: Style {
-                size: Size::new(Val::Px(120.0), Val::Px(50.0)),
+                size: Size::new(Val::Px(240.0), Val::Px(100.0)),
                 margin: UiRect::all(Val::Auto),
                 justify_content: JustifyContent::Center,
                 align_items: AlignItems::Center,
@@ -54,13 +55,14 @@ fn setup_menu(
                 TextStyle {
                     font: font_assets.fira_sans.clone(),
                     font_size: 40.0,
-                    color: Color::rgb(0.9, 0.9, 0.9),
+                    color: Color::rgb(0.1, 0.1, 0.1),
                 },
             ));
         });
 }
 
-fn click_play_button(
+// Bevy System
+fn play_button(
     button_colors: Res<ButtonColors>,
     mut state: ResMut<NextState<GameState>>,
     mut interaction_query: Query<
@@ -83,6 +85,12 @@ fn click_play_button(
     }
 }
 
-fn cleanup_menu(mut commands: Commands, button: Query<Entity, With<Button>>) {
+// Bevy System
+fn cleanup_menu(
+    mut commands: Commands,
+    button: Query<Entity, With<Button>>,
+    camera: Query<Entity, With<Camera>>,
+) {
     commands.entity(button.single()).despawn_recursive();
+    commands.entity(camera.single()).despawn_recursive();
 }

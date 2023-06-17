@@ -1,5 +1,5 @@
 use crate::GameState;
-use bevy::prelude::*;
+use bevy::{gltf::Gltf, prelude::*};
 use bevy_asset_loader::prelude::*;
 use bevy_kira_audio::AudioSource;
 
@@ -11,11 +11,12 @@ pub struct LoadingPlugin;
 impl Plugin for LoadingPlugin {
     fn build(&self, app: &mut App) {
         app.add_loading_state(
-            LoadingState::new(GameState::Loading).continue_to_state(GameState::Menu),
+            LoadingState::new(GameState::Loading).continue_to_state(GameState::StartMenu),
         )
         .add_collection_to_loading_state::<_, FontAssets>(GameState::Loading)
         .add_collection_to_loading_state::<_, AudioAssets>(GameState::Loading)
         .add_collection_to_loading_state::<_, TextureAssets>(GameState::Loading);
+        // .add_collection_to_loading_state::<_, GltfAssets>(GameState::Loading);
     }
 }
 
@@ -39,3 +40,9 @@ pub struct TextureAssets {
     #[asset(path = "textures/bevy.png")]
     pub texture_bevy: Handle<Image>,
 }
+
+// #[derive(AssetCollection, Resource)]
+// pub struct GltfAssets {
+//     #[asset(path = "meshes/lvl_1.glb")]
+//     pub gltf_master: Handle<Gltf>,
+// }

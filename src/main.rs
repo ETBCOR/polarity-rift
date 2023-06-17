@@ -5,19 +5,20 @@ use bevy::prelude::*;
 use bevy::window::PrimaryWindow;
 use bevy::winit::WinitWindows;
 use bevy::DefaultPlugins;
-use bevy_game::GamePlugin; // ToDo: Replace bevy_game with your new crate name.
+use polarity_rift::GamePlugin;
 use std::io::Cursor;
 use winit::window::Icon;
 
 fn main() {
     App::new()
         .insert_resource(Msaa::Off)
-        .insert_resource(ClearColor(Color::rgb(0.4, 0.4, 0.4)))
+        .insert_resource(ClearColor(Color::rgb(0.15, 0.15, 0.15)))
         .add_plugins(DefaultPlugins.set(WindowPlugin {
             primary_window: Some(Window {
-                title: "Bevy game".to_string(), // ToDo
-                resolution: (800., 600.).into(),
+                title: "Polarity Rift".to_string(),
                 canvas: Some("#bevy".to_owned()),
+                fit_canvas_to_parent: true,
+                prevent_default_event_handling: false,
                 ..default()
             }),
             ..default()
